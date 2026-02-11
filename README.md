@@ -30,7 +30,7 @@ Configure o arquivo .env com suas chaves do Supabase.
 
 Execute npm run dev.
 
-## 📸 Demonstração Visual
+##  Demonstração Visual
 
 ### Vitrine Principal
 ![Store 316 Home](/screenshots/vitrine.png)
