@@ -14,11 +14,11 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
         if (!file) return;
 
         setIsImporting(true);
-        // Iniciamos o log com a mensagem de processamento
-        setLog([{ type: 'info', message: "Sincronizando categorias e preparando dados..." }]);
+        // Iniciamos o log limpando o estado anterior
+        setLog([{ type: 'info', message: "Sincronizando categorias e validando colunas..." }]);
 
         try {
-            // 1. Busca os UUIDs reais das categorias
+            // 1. Busca os UUIDs das categorias para o "Tradutor"
             const { data: categories } = await supabase.from('categories').select('id, name');
             const categoryMap = new Map();
             categories?.forEach(cat => categoryMap.set(cat.name.toLowerCase().trim(), cat.id));
@@ -26,13 +26,16 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
             Papa.parse(file, {
                 header: true,
                 skipEmptyLines: true,
+                // Transforma os cabeçalhos para minúsculo e remove espaços
+                transformHeader: (h) => h.toLowerCase().trim().replace(/\s+/g, '_'),
                 complete: async (results) => {
                     const rows = results.data as any[];
                     const toInsert = [];
                     const errors = [];
 
                     for (const [index, row] of rows.entries()) {
-                        const rawCat = (row.category_id || row.category || "").toLowerCase().trim();
+                        // Mapeamento flexível (aceita 'category', 'categoria' ou 'category_id')
+                        const rawCat = (row.category || row.categoria || row.category_id || "").toLowerCase().trim();
                         const uuid = categoryMap.get(rawCat);
 
                         if (!uuid) {
@@ -40,14 +43,19 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
                             continue;
                         }
 
+                        // Sanitização e formatação
                         toInsert.push({
-                            name: row.name,
-                            price: parseFloat(String(row.price || 0).replace(",", ".")) || 0,
+                            name: row.name || row.nome || row.produto,
+                            price: parseFloat(String(row.price || row.preco || 0).replace(",", ".")) || 0,
                             category_id: uuid,
-                            image_urls: row.images ? row.images.split(",").map((s: string) => s.trim()) : [],
-                            sizes: row.sizes ? row.sizes.split(",").map((s: string) => s.trim()) : ["P", "M", "G"],
-                            description: row.description || "",
-                            discount_percent: parseFloat(row.discount_percent) || 0,
+                            image_urls: (row.images || row.imagens || row.image_urls)
+                                ? String(row.images || row.imagens || row.image_urls).split(",").map((s: string) => s.trim())
+                                : [],
+                            sizes: (row.sizes || row.tamanhos)
+                                ? String(row.sizes || row.tamanhos).split(",").map((s: string) => s.trim())
+                                : ["P", "M", "G"],
+                            description: row.description || row.descricao || "",
+                            discount_percent: parseFloat(row.discount_percent || row.desconto) || 0,
                             is_active: true
                         });
                     }
@@ -56,29 +64,25 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
                         const { error: insertError } = await supabase.from("products").insert(toInsert);
 
                         if (insertError) {
-                            // Em caso de erro, mostramos o erro mas paramos o loading
                             setLog([{ type: 'error', message: `Erro Supabase: ${insertError.message}` }]);
                         } else {
-                            // SUCESSO: Aqui nós LIMPAMOS o log anterior e mostramos apenas a mensagem de sucesso
-                            setLog([{ type: 'success', message: `MÁGICA FEITA! ${toInsert.length} itens importados com sucesso.` }]);
+                            // SUCESSO: Substituímos o log inteiro para remover o spinner de 'info'
+                            setLog([{ type: 'success', message: `MÁGICA CONCLUÍDA! ${toInsert.length} produtos importados.` }]);
                             onImportSuccess();
                         }
                     }
 
-                    if (errors.length > 0 && toInsert.length === 0) {
-                        // Se nada foi inserido e houve erros de categoria
-                        setLog(errors.map(err => ({ type: 'error' as const, message: err })));
-                    } else if (errors.length > 0) {
-                        // Se houve sucessos mas alguns erros parciais, adicionamos ao log
+                    // Se houveram erros de categoria, adicionamos ao log sem resetar o sucesso
+                    if (errors.length > 0) {
                         const errorLogs = errors.map(err => ({ type: 'error' as const, message: err }));
-                        setLog(prev => [...errorLogs, ...prev]);
+                        setLog(prev => [...prev, ...errorLogs]);
                     }
 
                     setIsImporting(false);
                 }
             });
         } catch (err: any) {
-            setLog([{ type: 'error', message: "Falha de conexão: " + err.message }]);
+            setLog([{ type: 'error', message: "Falha crítica: " + err.message }]);
             setIsImporting(false);
         }
     };
@@ -101,7 +105,7 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
                 <div className="flex flex-col items-center justify-center">
                     <Upload className={`w-8 h-8 mb-3 ${isImporting ? 'text-zinc-700' : 'text-zinc-500'}`} />
                     <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest text-center px-4">
-                        {isImporting ? "Injetando Dados no Banco..." : "Clique para subir o arquivo .csv"}
+                        {isImporting ? "Gravando no Banco de Dados..." : "Solte seu arquivo CSV aqui"}
                     </p>
                 </div>
                 <input type="file" accept=".csv" onChange={handleFileUpload} className="hidden" disabled={isImporting} />
@@ -110,9 +114,9 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
             {log.length > 0 && (
                 <div className="mt-6 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div className="flex items-center justify-between mb-2 px-1">
-                        <span className="text-[9px] text-zinc-600 uppercase font-black tracking-widest">Relatório de Processamento</span>
+                        <span className="text-[9px] text-zinc-600 uppercase font-black tracking-widest">Relatório</span>
                         {!isImporting && (
-                            <button onClick={() => setLog([])} className="text-[9px] text-zinc-700 hover:text-white transition uppercase font-bold">Limpar</button>
+                            <button onClick={() => setLog([])} className="text-[9px] text-zinc-700 hover:text-white transition uppercase font-bold">Limpar Logs</button>
                         )}
                     </div>
                     <div className="max-h-48 overflow-y-auto bg-black border border-white/5 rounded-lg p-4 space-y-2 custom-scrollbar">
