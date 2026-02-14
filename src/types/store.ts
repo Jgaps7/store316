@@ -13,6 +13,7 @@ export interface Product {
     image_urls: string[];
     category_id?: string;
     sizes: string[];
+    discount_percent?: number;
     is_active?: boolean;
     created_at?: string;
     categories?: Category; // Join result from Supabase

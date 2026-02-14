@@ -67,16 +67,17 @@ export async function createProduct(prevState: any, formData: FormData) {
             description,
             category_id: categoryId,
             image_urls: image_urls,
-            sizes: sizes, // Campo novo para grade de tamanhos.
+            sizes: sizes,
+            discount_percent: formData.get("discountPercent") ? parseFloat(formData.get("discountPercent") as string) : 0,
         });
 
-        if (error) return { error: "Erro ao cadastrar no banco." };
+        if (error) return { error: `Erro Supabase: ${error.message} - ${error.details || ''}` };
 
         revalidatePath("/acesso-restrito-316");
         revalidatePath("/");
         return { success: true, error: null };
-    } catch (e) {
-        return { error: "Falha ao processar cadastro." };
+    } catch (e: any) {
+        return { error: `Falha interna: ${e.message || 'Erro desconhecido'}` };
     }
 }
 
@@ -106,7 +107,8 @@ export async function updateProduct(id: string, prevState: any, formData: FormDa
             description,
             category_id: categoryId,
             image_urls: image_urls,
-            sizes: sizes, // Campo novo para grade de tamanhos.
+            sizes: sizes,
+            discount_percent: formData.get("discountPercent") ? parseFloat(formData.get("discountPercent") as string) : 0,
         }).eq("id", id);
 
         if (error) return { error: "Erro ao atualizar produto." };

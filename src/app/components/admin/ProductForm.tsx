@@ -95,18 +95,33 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
                     </select>
                 </div>
 
-                {/* Campo: Preço */}
-                <div>
-                    <label className="block text-[10px] text-[#D4AF37] uppercase mb-1 tracking-widest">Preço</label>
-                    <input
-                        name="price"
-                        type="number"
-                        step="0.01"
-                        defaultValue={editingProduct?.price || ""}
-                        placeholder="0.00"
-                        className="w-full bg-black border border-[#333] p-3 text-white placeholder-gray-800 focus:border-[#D4AF37] outline-none transition text-sm font-mono"
-                        required
-                    />
+                {/* Campo: Preço e Desconto */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-[10px] text-[#D4AF37] uppercase mb-1 tracking-widest">Preço (R$)</label>
+                        <input
+                            name="price"
+                            type="number"
+                            step="0.01"
+                            defaultValue={editingProduct?.price || ""}
+                            placeholder="0.00"
+                            className="w-full bg-black border border-[#333] p-3 text-white placeholder-gray-800 focus:border-[#D4AF37] outline-none transition text-sm font-mono"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] text-[#D4AF37] uppercase mb-1 tracking-widest">Desconto (%)</label>
+                        <input
+                            name="discountPercent"
+                            type="number"
+                            step="1"
+                            min="0"
+                            max="100"
+                            defaultValue={editingProduct?.discount_percent || ""}
+                            placeholder="0"
+                            className="w-full bg-black border border-[#333] p-3 text-white placeholder-gray-800 focus:border-[#D4AF37] outline-none transition text-sm font-mono"
+                        />
+                    </div>
                 </div>
 
                 {/* Campo: Seleção de Tamanhos (Multi-select) */}

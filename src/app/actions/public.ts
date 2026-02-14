@@ -38,3 +38,21 @@ export async function getProductsByCategory(categorySlug: string) {
     }
     return data;
 }
+
+/**
+ * BUSCA UM PRODUTO PELO ID
+ * Usado na página de detalhes do produto.
+ */
+export async function getProductById(id: string) {
+    const { data, error } = await supabase
+        .from("products")
+        .select("*, categories(name, slug)")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        console.error("Erro ao buscar produto:", error.message);
+        return null;
+    }
+    return data;
+}
