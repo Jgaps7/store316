@@ -69,17 +69,19 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
     };
 
     return (
-        <div className="bg-[#0a0a0a] rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="bg-[#0a0a0a] rounded-xl shadow-2xl flex flex-col max-h-[90vh] w-full">
             {/* STICKY HEADER */}
-            <header className="flex items-center justify-between p-6 border-b border-white/5 bg-[#0a0a0a] sticky top-0 z-50">
+            <header className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-[#0a0a0a] shrink-0">
                 <h2 className="text-lg font-serif text-[#D4AF37] uppercase tracking-widest">
                     {editingProduct ? "Editar Produto" : "Novo Produto"}
                 </h2>
                 <button
                     onClick={onCancelEdit}
-                    className="p-2 text-zinc-500 hover:text-white transition rounded-full border border-transparent hover:border-white/10"
+                    type="button"
+                    className="p-2 text-zinc-500 hover:text-white transition-colors rounded-full hover:bg-white/5"
+                    aria-label="Fechar"
                 >
-                    <X size={20} />
+                    <X size={20} strokeWidth={1.5} />
                 </button>
             </header>
 
