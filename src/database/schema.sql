@@ -17,7 +17,9 @@ create table products (
   description text,
   price decimal(10,2) not null,
   promotional_price decimal(10,2),
+  discount_percent numeric default 0, -- Desconto percentual (0-100)
   image_urls text[], -- Array of URLs
+  sizes text[], -- Array de tamanhos disponíveis (ex: ['P', 'M', 'G', 'GG'])
   is_active boolean default true,
   created_at timestamp with time zone default now()
 );

@@ -84,7 +84,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const clearCart = () => setCart([]);
 
-    const total = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    // Calcula o total considerando descontos
+    const total = cart.reduce((acc, item) => {
+        const discount = item.product.discount_percent || 0;
+        const finalPrice = item.product.price * (1 - discount / 100);
+        return acc + finalPrice * item.quantity;
+    }, 0);
+
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     const value = useMemo(() => ({

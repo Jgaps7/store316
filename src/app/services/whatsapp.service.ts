@@ -11,12 +11,21 @@ export class WhatsAppService {
         // 1. Cabeçalho do Pedido
         const header = encodeURIComponent("🛒 *NOVO PEDIDO - STORE 316*\n\n");
 
-        // 2. Lista de Itens Formatada
+        // 2. Lista de Itens Formatada (com desconto aplicado)
         const itemsList = items.map(item => {
-            const itemTotal = (item.product.price * item.quantity).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            const discount = item.product.discount_percent || 0;
+            const finalPrice = item.product.price * (1 - discount / 100);
+            const itemTotal = (finalPrice * item.quantity).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+            let priceInfo = `R$ ${finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            if (discount > 0) {
+                priceInfo += ` _(${discount}% OFF)_`;
+            }
+
             return encodeURIComponent(
                 `• *${item.product.name}*\n` +
                 `  *Tamanho: ${item.selectedSize}*\n` +
+                `  Preço: ${priceInfo}\n` +
                 `  Qtd: ${item.quantity} | Subtotal: R$ ${itemTotal}\n\n`
             );
         }).join("");
