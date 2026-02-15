@@ -5,7 +5,7 @@ import { ProductForm } from "./ProductForm";
 import { CSVImporter } from "./CSVImporter";
 import { deleteProduct, updateProduct } from "@/app/actions/products";
 import { Product, Category } from "@/types/store";
-import { Search, Filter, Merge, Trash2, Edit2, CheckSquare, Square, Upload, X } from "lucide-react";
+import { Search, Filter, Merge, Trash2, Edit2, CheckSquare, Square, Upload, X, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // Helper: Transforma links comuns do Google Drive em links diretos de visualização (lh3)
@@ -183,6 +183,16 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
                                     <span>{isMerging ? "..." : `Agrupar (${selectedProductIds.length})`}</span>
                                 </button>
                             )}
+
+                            {selectedProductIds.length > 0 && (
+                                <button
+                                    onClick={() => setSelectedProductIds([])}
+                                    className="p-2.5 bg-[#111] border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition uppercase text-[10px] font-bold tracking-widest group"
+                                    title="Cancelar Seleção"
+                                >
+                                    <RotateCcw size={14} className="group-hover:-rotate-180 transition-transform duration-500" />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </header>
@@ -198,7 +208,7 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
                             return (
                                 <div
                                     key={p.id}
-                                    className={`group relative bg-[#0a0a0a] border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${isSelected ? 'border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)]' : 'border-[#222] hover:border-[#D4AF37]/50'}`}
+                                    className={`group relative bg-[#0a0a0a] border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${isSelected ? 'border-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)] ring-1 ring-[#D4AF37]/50' : 'border-[#222] hover:border-[#D4AF37]/50'}`}
                                 >
                                     {/* Selection Overlay */}
                                     <div className="absolute top-2 left-2 z-20">
@@ -306,20 +316,9 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
                 </div>
             </main>
 
-            {/* Modal: Product Form */}
             {(showProductForm || editingProduct) && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 animate-in fade-in duration-200 backdrop-blur-sm">
-                    <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
-                        <button
-                            onClick={() => {
-                                setShowProductForm(false);
-                                setEditingProduct(null);
-                            }}
-                            className="absolute top-4 right-4 z-50 p-2 bg-black rounded-full border border-[#333] text-gray-400 hover:text-white hover:border-[#D4AF37] transition"
-                        >
-                            <X size={20} />
-                        </button>
-
+                    <div className="relative w-full max-w-5xl">
                         <ProductForm
                             categories={categories}
                             editingProduct={editingProduct}

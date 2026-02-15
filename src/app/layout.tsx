@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import Navbar from "@/app/components/Navbar";
-import CartSidebar from "@/app/components/CartSidebar";
+import ClientLayout from "@/app/components/ClientLayout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,15 +30,9 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} antialiased bg-black text-white min-h-screen`}
       >
         <Providers>
-          {/* IMPORTANTE: Navbar e CartSidebar devem estar aqui dentro.
-             Como o CartSidebar não recebe mais props, o erro ts(2739) sumirá.
-          */}
-          <Navbar />
-          <CartSidebar />
-
-          <main className="pt-20">
+          <ClientLayout>
             {children}
-          </main>
+          </ClientLayout>
         </Providers>
       </body>
     </html>
