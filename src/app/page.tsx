@@ -1,8 +1,27 @@
-import Image from "next/image"; // Importe o componente Image
+import Image from "next/image";
 import { getPublicProducts } from "@/app/actions/public";
 import ProductCard from "@/app/components/ProductCard";
 import Hero from "@/app/components/Hero";
 import { Product } from "@/types/store";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Store 316 | Moda Masculina Premium - Streetwear de Luxo",
+  description: "Descubra a Store 316: vestuário masculino premium, streetwear exclusivo e peças de luxo. Conjuntos, camisas, tênis e acessórios com estilo único. Entrega para todo Brasil.",
+  keywords: "moda masculina premium, streetwear luxo, roupas masculinas exclusivas, Store 316, vestuário de grife, conjuntos masculinos, tênis premium, camisas oversized, moda urbana Brasil",
+  openGraph: {
+    title: "Store 316 - Moda Masculina Premium",
+    description: "Vestuário masculino de luxo com estilo único. Coleção exclusiva de streetwear premium.",
+    images: ["/logo.png"],
+    type: "website",
+    siteName: "Store 316",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Store 316 - Streetwear Premium",
+    description: "Moda masculina de luxo com identidade brasileira.",
+  },
+};
 
 export const revalidate = 3600;
 
