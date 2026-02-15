@@ -317,8 +317,8 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
             </main>
 
             {(showProductForm || editingProduct) && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 animate-in fade-in duration-200 backdrop-blur-sm">
-                    <div className="relative w-full max-w-5xl">
+                <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/95 p-4 pt-20 animate-in fade-in duration-200 backdrop-blur-sm overflow-y-auto">
+                    <div className="relative w-full max-w-5xl my-auto">
                         <ProductForm
                             categories={categories}
                             editingProduct={editingProduct}

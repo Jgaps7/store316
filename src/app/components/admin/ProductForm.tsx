@@ -69,7 +69,7 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
     };
 
     return (
-        <div className="bg-[#0a0a0a] rounded-xl shadow-2xl flex flex-col max-h-[90vh] w-full">
+        <div className="bg-[#0a0a0a] rounded-xl shadow-2xl flex flex-col max-h-[85vh] w-full overflow-hidden border border-white/10">
             {/* STICKY HEADER */}
             <header className="flex items-center justify-between px-6 py-5 border-b border-white/5 bg-[#0a0a0a] shrink-0">
                 <h2 className="text-lg font-serif text-[#D4AF37] uppercase tracking-widest">
