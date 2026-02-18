@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ProductForm } from "./ProductForm";
 import { CSVImporter } from "./CSVImporter";
 import { deleteProduct, updateProduct } from "@/app/actions/products";
 import { Product, Category } from "@/types/store";
-import { Search, Filter, Merge, Trash2, Edit2, CheckSquare, Square, Upload, X, RotateCcw } from "lucide-react";
+import { Search, Filter, Merge, Trash2, Edit2, CheckSquare, Square, Upload, X, RotateCcw, Tag, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // Helper: Transforma links comuns do Google Drive em links diretos de visualização (lh3)
@@ -31,6 +31,31 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
 
     // Modal de Importação
     const [showImportModal, setShowImportModal] = useState(false);
+
+    // Controle global de desconto
+    const [globalDiscount, setGlobalDiscount] = useState(0); // 0 = desativado
+    const [discountInput, setDiscountInput] = useState("20");
+
+    useEffect(() => {
+        const stored = localStorage.getItem("store316_global_discount");
+        const val = stored !== null ? parseFloat(stored) : 0;
+        setGlobalDiscount(val);
+        if (val > 0) setDiscountInput(String(val));
+    }, []);
+
+    const applyGlobalDiscount = () => {
+        const pct = parseFloat(discountInput);
+        if (isNaN(pct) || pct < 0 || pct > 100) return;
+        setGlobalDiscount(pct);
+        localStorage.setItem("store316_global_discount", String(pct));
+        window.dispatchEvent(new CustomEvent("discountChange", { detail: { discount: pct } }));
+    };
+
+    const removeGlobalDiscount = () => {
+        setGlobalDiscount(0);
+        localStorage.setItem("store316_global_discount", "0");
+        window.dispatchEvent(new CustomEvent("discountChange", { detail: { discount: 0 } }));
+    };
 
     // Lógica de Filtragem
     const [showProductForm, setShowProductForm] = useState(false);
@@ -131,6 +156,39 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
                                 <span className="text-lg leading-none mb-0.5">+</span>
                                 <span>Novo Produto</span>
                             </button>
+
+                            {/* Controle de Desconto Global */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1 bg-[#111] border border-[#333] px-3 py-2">
+                                    <Tag size={12} className={globalDiscount > 0 ? "text-[#D4AF37]" : "text-gray-600"} />
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        value={discountInput}
+                                        onChange={(e) => setDiscountInput(e.target.value)}
+                                        className="w-12 bg-transparent text-white text-[10px] font-mono outline-none text-center"
+                                        placeholder="0"
+                                    />
+                                    <span className="text-gray-500 text-[10px]">%</span>
+                                </div>
+                                <button
+                                    onClick={applyGlobalDiscount}
+                                    className="px-3 py-2 bg-[#D4AF37] text-black text-[10px] font-bold uppercase tracking-widest hover:bg-[#b5952f] transition"
+                                    title="Aplicar desconto global no site"
+                                >
+                                    {globalDiscount > 0 ? `ON ${globalDiscount}%` : "Aplicar"}
+                                </button>
+                                {globalDiscount > 0 && (
+                                    <button
+                                        onClick={removeGlobalDiscount}
+                                        className="px-3 py-2 border border-red-800/40 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:bg-red-900/10 transition"
+                                        title="Remover desconto global"
+                                    >
+                                        <XCircle size={14} />
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         {/* Actions Bar (Search, Filter, Import, Merge) */}
@@ -276,25 +334,34 @@ export function AdminDashboardClient({ products, categories }: { products: Produ
 
                                         <div className="flex items-center justify-between">
                                             <div className="flex flex-col">
-                                                {p.discount_percent && p.discount_percent > 0 ? (
-                                                    <>
-                                                        <span className="text-[9px] text-gray-600 line-through">R$ {Number(p.price).toFixed(2)}</span>
+                                                {(() => {
+                                                    const effectiveDiscount = globalDiscount > 0 ? globalDiscount : (p.discount_percent || 0);
+                                                    const hasDiscount = effectiveDiscount > 0;
+                                                    const finalPrice = hasDiscount ? p.price * (1 - effectiveDiscount / 100) : p.price;
+
+                                                    return hasDiscount ? (
+                                                        <>
+                                                            <span className="text-[9px] text-gray-600 line-through">R$ {Number(p.price).toFixed(2)}</span>
+                                                            <span className="text-xs text-[#D4AF37] font-mono leading-none">
+                                                                R$ {finalPrice.toFixed(2)}
+                                                            </span>
+                                                        </>
+                                                    ) : (
                                                         <span className="text-xs text-[#D4AF37] font-mono leading-none">
-                                                            R$ {(p.price * (1 - p.discount_percent / 100)).toFixed(2)}
+                                                            R$ {Number(p.price).toFixed(2)}
                                                         </span>
-                                                    </>
-                                                ) : (
-                                                    <span className="text-xs text-[#D4AF37] font-mono leading-none">
-                                                        R$ {Number(p.price).toFixed(2)}
-                                                    </span>
-                                                )}
+                                                    );
+                                                })()}
                                             </div>
 
-                                            {p.discount_percent && p.discount_percent > 0 && (
-                                                <span className="text-[9px] font-bold text-red-500 bg-red-900/10 px-1.5 py-0.5 border border-red-900/20 rounded">
-                                                    -{p.discount_percent}%
-                                                </span>
-                                            )}
+                                            {(() => {
+                                                const effectiveDiscount = globalDiscount > 0 ? globalDiscount : (p.discount_percent || 0);
+                                                return effectiveDiscount > 0 && (
+                                                    <span className="text-[9px] font-bold text-red-500 bg-red-900/10 px-1.5 py-0.5 border border-red-900/20 rounded">
+                                                        -{effectiveDiscount}%
+                                                    </span>
+                                                );
+                                            })()}
                                         </div>
 
                                         <div className="mt-2 pt-2 border-t border-[#222] flex justify-between items-center">

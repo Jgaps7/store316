@@ -13,7 +13,8 @@ export default function CartSidebar() {
         setIsCartOpen,
         updateQuantity,
         removeFromCart,
-        total
+        total,
+        globalDiscount // Consumindo do Contexto Centralizado
     } = useCart();
 
     if (!isCartOpen) return null;
@@ -80,9 +81,32 @@ export default function CartSidebar() {
                                             </span>
                                         </div>
 
-                                        <p className="text-[#D4AF37] text-xs mt-2 font-mono">
-                                            R$ {item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                        </p>
+                                        {/* Lógica de Preço com Desconto */}
+                                        {(() => {
+                                            const effectiveDiscount = globalDiscount > 0 ? globalDiscount : (item.product.discount_percent || 0);
+                                            const finalPrice = item.product.price * (1 - effectiveDiscount / 100);
+                                            const hasDiscount = effectiveDiscount > 0;
+
+                                            return (
+                                                <div className="mt-2 flex flex-col items-start gap-0.5">
+                                                    {hasDiscount && (
+                                                        <span className="text-[10px] text-gray-500 line-through font-mono">
+                                                            R$ {item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    )}
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="text-[#D4AF37] text-xs font-mono font-bold">
+                                                            R$ {finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                        </p>
+                                                        {hasDiscount && (
+                                                            <span className="text-[8px] px-1 py-0.5 bg-[#D4AF37]/20 text-[#D4AF37] rounded border border-[#D4AF37]/30">
+                                                                -{effectiveDiscount}%
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
 
                                     {/* Controles de Quantidade e Remoção */}

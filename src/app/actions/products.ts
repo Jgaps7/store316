@@ -27,6 +27,7 @@ export async function getProducts() {
 }
 
 export async function getCategories() {
+    await checkSession();
     const supabase = getAdminClient();
     const { data, error } = await supabase
         .from("categories")

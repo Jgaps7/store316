@@ -5,7 +5,7 @@ import { motion, Variants } from "framer-motion";
 
 export default function BioLinks() {
     const links = [
-        { title: "Site Oficial", icon: <Globe size={18} />, url: "/" }, // Using root relative path or full domain
+        { title: "Site Oficial", icon: <Globe size={18} />, url: "https://www.store316.com.br/" }, // Using root relative path or full domain
         { title: "Atendimento Vendedor 01", icon: <MessageCircle size={18} />, url: "https://wa.me/5561984611083" },
         { title: "Atendimento Vendedor 02", icon: <MessageCircle size={18} />, url: "https://wa.me/5561984611083" }, // Using same number as fallback
         { title: "Nossa Localização", icon: <MapPin size={18} />, url: "https://maps.google.com" }, // Placeholder as no address found
@@ -56,14 +56,14 @@ export default function BioLinks() {
                     className="mb-16 relative group"
                 >
                     {/* Glow Dourado */}
-                    <div className="absolute -inset-8 bg-[#D4AF37] blur-3xl rounded-full z-0 opacity-20 animate-pulse"></div>
+                    <div className="absolute -inset-10 bg-[#D4AF37] blur-3xl rounded-full z-0 opacity-20 animate-pulse"></div>
 
                     {/* Container da Logo */}
-                    <div className="w-32 h-32 rounded-full border-[3px] border-[#D4AF37] p-1 shadow-[0_0_40px_rgba(212,175,55,0.3)] relative z-10 bg-black overflow-hidden flex items-center justify-center">
+                    <div className="w-48 h-48 rounded-full border-[3px] border-[#D4AF37] p-1 shadow-[0_0_50px_rgba(212,175,55,0.4)] relative z-10 bg-black overflow-hidden flex items-center justify-center">
                         <img
                             src="/logo.png"
                             alt="Store 316"
-                            className="w-full h-full object-contain p-2"
+                            className="w-full h-full object-contain p-3"
                         />
                     </div>
                 </motion.div>

@@ -2,9 +2,20 @@ import { logout } from "@/app/actions/auth";
 import { getProducts, getCategories } from "@/app/actions/products";
 import { AdminDashboardClient } from "@/app/components/admin/AdminDashboardClient";
 
+import { cookies } from "next/headers";
+import { getIronSession } from "iron-session";
+import { sessionOptions, SessionData } from "@/lib/session";
+import { redirect } from "next/navigation";
+
 export default async function AdminPage() {
+    // SEGURANÇA: Verificação de sessão obrigatória no Server Component
+    const cookieStore = await cookies();
+    const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+    if (!session.isLoggedIn || !session.isAdmin) {
+        redirect("/login");
+    }
+
     // Performance: Buscamos produtos e categorias em paralelo (Promise.all)
-    // para que a página carregue o mais rápido possível, sem esperar um terminar para começar o outro.
     const [products, categories] = await Promise.all([
         getProducts(),
         getCategories()

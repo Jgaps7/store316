@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getDirectDriveLink } from "@/lib/utils";
 import ProductImages from "@/app/components/ProductImages";
 import AddToCartButton from "@/app/components/AddToCartButton";
+import ProductPriceDisplay from "@/app/components/ProductPriceDisplay";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -145,24 +146,7 @@ export default async function ProductPage({ params }: PageProps) {
                     </div>
 
                     <div className="space-y-1">
-                        {hasDiscount ? (
-                            <div className="flex items-center gap-4">
-                                <span className="text-gray-500 line-through font-serif text-xl">
-                                    R$ {price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                </span>
-                                <span className="text-[#D4AF37] font-serif text-3xl">
-                                    R$ {finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                </span>
-                                <span className="bg-[#D4AF37] text-black text-[10px] uppercase font-bold px-2 py-1 rounded-sm">
-                                    {discount_percent}% OFF
-                                </span>
-                            </div>
-                        ) : (
-                            <p className="text-[#D4AF37] font-serif text-3xl">
-                                R$ {price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </p>
-                        )}
-                        <p className="text-gray-500 text-xs font-light">Em até 12x de R$ {(finalPrice / 12).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                        <ProductPriceDisplay price={price} discountPercent={discount_percent} />
                     </div>
 
                     <div className="prose prose-invert prose-sm text-gray-300 font-light leading-relaxed">

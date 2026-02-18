@@ -15,6 +15,7 @@ interface CartContextType {
     clearCart: () => void;
     total: number;
     cartCount: number;
+    globalDiscount: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -84,10 +85,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const clearCart = () => setCart([]);
 
-    // Calcula o total considerando descontos
+    // Desconto global: lê do localStorage e escuta mudanças
+    const [globalDiscount, setGlobalDiscount] = useState(0);
+    useEffect(() => {
+        const stored = localStorage.getItem("store316_global_discount");
+        if (stored !== null) setGlobalDiscount(parseFloat(stored) || 0);
+
+        const handleChange = (e: Event) => {
+            const custom = e as CustomEvent<{ discount: number }>;
+            setGlobalDiscount(custom.detail.discount);
+        };
+        const handleStorage = (e: StorageEvent) => {
+            if (e.key === "store316_global_discount") {
+                setGlobalDiscount(parseFloat(e.newValue || "0") || 0);
+            }
+        };
+        window.addEventListener("discountChange", handleChange);
+        window.addEventListener("storage", handleStorage);
+        return () => {
+            window.removeEventListener("discountChange", handleChange);
+            window.removeEventListener("storage", handleStorage);
+        };
+    }, []);
+
+    // Calcula o total considerando descontos (global sobrescreve individual)
     const total = cart.reduce((acc, item) => {
-        const discount = item.product.discount_percent || 0;
-        const finalPrice = item.product.price * (1 - discount / 100);
+        const effectiveDiscount = globalDiscount > 0 ? globalDiscount : (item.product.discount_percent || 0);
+        const finalPrice = item.product.price * (1 - effectiveDiscount / 100);
         return acc + finalPrice * item.quantity;
     }, 0);
 
@@ -103,7 +127,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         total,
         cartCount,
-    }), [cart, isCartOpen, total, cartCount]);
+        globalDiscount, // Exposed globally
+    }), [cart, isCartOpen, total, cartCount, globalDiscount]);
 
     return (
         <CartContext.Provider value={value}>

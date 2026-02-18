@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/app/context/CartContext";
 import { Product } from "@/types/store";
 import Image from "next/image";
@@ -9,9 +9,8 @@ import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
-    const { addToCart } = useCart();
+    const { addToCart, globalDiscount } = useCart();
     const [currentIndex, setCurrentIndex] = useState(0);
-
 
     // ESTADO DE TAMANHO: Armazena o tamanho escolhido pelo cliente
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -38,9 +37,11 @@ export default function ProductCard({ product }: { product: Product }) {
         addToCart(product, selectedSize);
     };
 
-    const hasDiscount = product.discount_percent && product.discount_percent > 0;
+    // Desconto global sobrescreve o individual; se nenhum, sem desconto
+    const effectiveDiscount = globalDiscount > 0 ? globalDiscount : (product.discount_percent || 0);
+    const hasDiscount = effectiveDiscount > 0;
     const finalPrice = hasDiscount
-        ? product.price * (1 - product.discount_percent! / 100)
+        ? product.price * (1 - effectiveDiscount / 100)
         : product.price;
 
     return (
@@ -93,6 +94,9 @@ export default function ProductCard({ product }: { product: Product }) {
                             </span>
                             <span className="text-[#D4AF37] text-sm font-light tracking-[0.1em]">
                                 R$ {finalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </span>
+                            <span className="text-[9px] font-bold text-black bg-[#D4AF37] px-1.5 py-0.5 rounded-sm">
+                                -{effectiveDiscount}%
                             </span>
                         </div>
                     ) : (

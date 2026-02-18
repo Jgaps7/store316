@@ -11,7 +11,9 @@ interface ProductFormProps {
     onCancelEdit?: () => void;
 }
 
-const AVAILABLE_SIZES = ["P", "M", "G", "GG", "38", "40", "42", "44", "46"];
+const AVAILABLE_SIZES = ["P", "M", "G", "GG", "38", "40", "42", "44", "46", "48"];
+const TENNIS_SIZES = ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44"];
+const ACCESSORIES_SIZES = ["Tamanho Único"];
 
 export function ProductForm({ categories, editingProduct, onCancelEdit }: ProductFormProps) {
     const action = editingProduct
@@ -22,14 +24,23 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
     const formRef = useRef<HTMLFormElement>(null);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>(editingProduct?.category_id || "");
+
+    // Determina os tamanhos disponíveis com base na categoria selecionada
+    const categoryName = categories.find(c => c.id === selectedCategoryId)?.name?.toLowerCase() || "";
+    const isTennis = categoryName.includes("tênis") || categoryName.includes("tenis");
+    const isAccessories = categoryName.includes("acessório") || categoryName.includes("acessorio");
+    const availableSizes = isTennis ? TENNIS_SIZES : isAccessories ? ACCESSORIES_SIZES : AVAILABLE_SIZES;
 
     useEffect(() => {
         if (editingProduct) {
             setSelectedSizes(editingProduct.sizes || []);
             setImageUrls(editingProduct.image_urls || []);
+            setSelectedCategoryId(editingProduct.category_id || "");
         } else {
             setSelectedSizes([]);
             setImageUrls([]);
+            setSelectedCategoryId("");
         }
     }, [editingProduct]);
 
@@ -185,7 +196,16 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
 
                                 <div>
                                     <label className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1.5 block">Categoria</label>
-                                    <select name="categoryId" defaultValue={editingProduct?.category_id || ""} className="w-full bg-zinc-900/50 border border-white/5 p-3 text-sm text-white focus:border-[#D4AF37] outline-none transition rounded-lg appearance-none cursor-pointer" required>
+                                    <select
+                                        name="categoryId"
+                                        value={selectedCategoryId}
+                                        onChange={(e) => {
+                                            setSelectedCategoryId(e.target.value);
+                                            setSelectedSizes([]); // Limpa tamanhos ao trocar categoria
+                                        }}
+                                        className="w-full bg-zinc-900/50 border border-white/5 p-3 text-sm text-white focus:border-[#D4AF37] outline-none transition rounded-lg appearance-none cursor-pointer"
+                                        required
+                                    >
                                         <option value="" disabled>Selecione...</option>
                                         {categories.map(cat => <option key={cat.id} value={cat.id} className="bg-zinc-900">{cat.name}</option>)}
                                     </select>
@@ -205,9 +225,13 @@ export function ProductForm({ categories, editingProduct, onCancelEdit }: Produc
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-2 block">Grades Disponíveis</label>
+                                    <label className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-2 block">
+                                        Grades Disponíveis
+                                        {isTennis && <span className="ml-2 text-[#D4AF37] normal-case tracking-normal font-normal">— Tênis (34-44)</span>}
+                                        {isAccessories && <span className="ml-2 text-[#D4AF37] normal-case tracking-normal font-normal">— Acessórios (Tamanho Único)</span>}
+                                    </label>
                                     <div className="grid grid-cols-3 gap-2">
-                                        {AVAILABLE_SIZES.map(size => (
+                                        {availableSizes.map(size => (
                                             <button
                                                 key={size}
                                                 type="button"
