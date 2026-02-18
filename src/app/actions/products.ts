@@ -135,3 +135,25 @@ export async function deleteProduct(id: string) {
         return { error: "Não autorizado." };
     }
 }
+
+export async function bulkCreateProducts(products: any[]) {
+    try {
+        await checkSession();
+        const supabase = getAdminClient(); // Bypass RLS
+
+        // Inserção em massa
+        const { error } = await supabase.from("products").insert(products);
+
+        if (error) {
+            console.error("Erro no bulk insert:", error);
+            return { error: `Erro Supabase: ${error.message}` };
+        }
+
+        revalidatePath("/acesso-restrito-316");
+        revalidatePath("/");
+        return { success: true };
+    } catch (e: any) {
+        console.error("Erro na action bulkCreateProducts:", e);
+        return { error: `Falha interna: ${e.message}` };
+    }
+}

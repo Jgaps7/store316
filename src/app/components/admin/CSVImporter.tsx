@@ -61,11 +61,14 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
                     }
 
                     if (toInsert.length > 0) {
-                        const { error: insertError } = await supabase.from("products").insert(toInsert);
+                        // USAR SERVER ACTION PARA BYPASS RLS
+                        const { bulkCreateProducts } = await import("@/app/actions/products");
+                        const result = await bulkCreateProducts(toInsert);
 
-                        if (insertError) {
-                            setLog([{ type: 'error', message: `Erro Supabase: ${insertError.message}` }]);
+                        if (result.error) {
+                            setLog([{ type: 'error', message: result.error }]);
                         } else {
+                            // SUCESSO
                             // SUCESSO: Substituímos o log inteiro para remover o spinner de 'info'
                             setLog([{ type: 'success', message: `MÁGICA CONCLUÍDA! ${toInsert.length} produtos importados.` }]);
                             onImportSuccess();
@@ -130,7 +133,7 @@ export function CSVImporter({ onImportSuccess }: { onImportSuccess: () => void }
                                     <Loader2 size={12} className="text-[#D4AF37] animate-spin mt-0.5" />
                                 )}
                                 <p className={`text-[10px] font-mono leading-relaxed tracking-tight ${entry.type === 'error' ? 'text-red-400/90' :
-                                        entry.type === 'success' ? 'text-green-400/90' : 'text-zinc-400'
+                                    entry.type === 'success' ? 'text-green-400/90' : 'text-zinc-400'
                                     }`}>
                                     {entry.message}
                                 </p>
