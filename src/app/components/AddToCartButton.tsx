@@ -34,8 +34,8 @@ export default function AddToCartButton({ product }: { product: Product }) {
                                 key={size}
                                 onClick={() => setSelectedSize(size)}
                                 className={`w-12 h-12 text-sm font-mono border transition-all duration-300 flex items-center justify-center ${selectedSize === size
-                                        ? "bg-[#D4AF37] border-[#D4AF37] text-black font-bold"
-                                        : "bg-transparent border-white/10 text-gray-500 hover:border-white/40"
+                                    ? "bg-[#D4AF37] border-[#D4AF37] text-black font-bold"
+                                    : "bg-transparent border-white/10 text-gray-400 hover:border-white/40"
                                     }`}
                             >
                                 {size}
@@ -50,8 +50,8 @@ export default function AddToCartButton({ product }: { product: Product }) {
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
                 className={`w-full py-4 text-xs uppercase tracking-[0.25em] font-medium transition-all duration-500 flex items-center justify-center gap-3 ${selectedSize
-                        ? "bg-[#D4AF37] text-black hover:bg-[#b5952f]"
-                        : "bg-[#111] text-gray-600 cursor-not-allowed border border-[#333]"
+                    ? "bg-[#D4AF37] text-black hover:bg-[#b5952f]"
+                    : "bg-[#111] text-gray-400 cursor-not-allowed border border-[#333]"
                     }`}
             >
                 <ShoppingBag size={16} />

@@ -21,7 +21,7 @@ export default function ProductPriceDisplay({ price, discountPercent }: ProductP
         <>
             {hasDiscount ? (
                 <div className="flex items-center gap-4">
-                    <span className="text-gray-500 line-through font-serif text-xl">
+                    <span className="text-gray-400 line-through font-serif text-xl">
                         R$ {price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </span>
                     <span className="text-[#D4AF37] font-serif text-3xl">

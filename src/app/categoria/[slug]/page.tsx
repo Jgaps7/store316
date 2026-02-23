@@ -112,7 +112,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
                 {products.length === 0 && (
                     <div className="text-center py-40">
-                        <p className="font-serif italic text-gray-600 text-xl">
+                        <p className="font-serif italic text-gray-400 text-xl">
                             Ainda não temos itens exclusivos nesta categoria.
                         </p>
                     </div>
