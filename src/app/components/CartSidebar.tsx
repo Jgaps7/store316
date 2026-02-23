@@ -43,6 +43,7 @@ export default function CartSidebar() {
                     <button
                         onClick={() => setIsCartOpen(false)}
                         className="text-white hover:text-[#D4AF37] transition-colors p-2"
+                        aria-label="Fechar carrinho"
                     >
                         <X size={24} />
                     </button>
@@ -115,6 +116,7 @@ export default function CartSidebar() {
                                             <button
                                                 onClick={() => updateQuantity(item.product.id, item.selectedSize, item.quantity - 1)}
                                                 className="text-white hover:text-[#D4AF37] p-1 transition-colors"
+                                                aria-label="Diminuir quantidade"
                                             >
                                                 <Minus size={12} />
                                             </button>
@@ -124,6 +126,7 @@ export default function CartSidebar() {
                                             <button
                                                 onClick={() => updateQuantity(item.product.id, item.selectedSize, item.quantity + 1)}
                                                 className="text-white hover:text-[#D4AF37] p-1 transition-colors"
+                                                aria-label="Aumentar quantidade"
                                             >
                                                 <Plus size={12} />
                                             </button>
@@ -133,6 +136,7 @@ export default function CartSidebar() {
                                             onClick={() => removeFromCart(item.product.id, item.selectedSize)}
                                             className="text-gray-500 hover:text-red-500 transition-colors"
                                             title="Remover item"
+                                            aria-label="Remover item do carrinho"
                                         >
                                             <Trash2 size={16} />
                                         </button>

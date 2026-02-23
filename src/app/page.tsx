@@ -48,10 +48,10 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-8">
           <div className="space-y-2">
             <h2 className="text-4xl font-serif tracking-tight">Coleção <span className="text-[#D4AF37]">01</span></h2>
-            <p className="text-gray-500 text-[10px] uppercase tracking-[0.3em]">Peças Selecionadas • Fevereiro 2026</p>
+            <p className="text-gray-400 text-[10px] uppercase tracking-[0.3em]">Peças Selecionadas • Fevereiro 2026</p>
           </div>
           <div className="hidden md:block text-right">
-            <p className="text-gray-600 text-[9px] uppercase tracking-widest max-w-[200px]">
+            <p className="text-gray-400 text-[9px] uppercase tracking-widest max-w-[200px]">
               Cada item é numerado e verificado sob os mais rígidos controles de qualidade.
             </p>
           </div>
@@ -64,7 +64,7 @@ export default async function Home() {
 
           {products.length === 0 && (
             <div className="col-span-full text-center py-40 border border-dashed border-white/10 rounded-lg">
-              <p className="font-serif italic text-gray-600">Aguardando o próximo drop exclusivo...</p>
+              <p className="font-serif italic text-gray-400">Aguardando o próximo drop exclusivo...</p>
             </div>
           )}
         </div>
@@ -81,18 +81,19 @@ export default async function Home() {
                 alt="Store 316"
                 fill
                 className="object-contain"
+                sizes="(max-width: 768px) 144px, 144px"
               />
             </div>
-            <p className="text-gray-600 text-[9px] uppercase tracking-[0.2em]">Onde o luxo encontra a autenticidade.</p>
+            <p className="text-gray-400 text-[9px] uppercase tracking-[0.2em]">Onde o luxo encontra a autenticidade.</p>
           </div>
 
-          <div className="flex gap-8 text-[10px] uppercase tracking-widest text-gray-500">
+          <div className="flex gap-8 text-[10px] uppercase tracking-widest text-gray-400">
             <a href="https://www.instagram.com/store_316_?igsh=MTdzNjZxMWIzMmJ4dw==" className="hover:text-[#D4AF37] transition-colors">Instagram</a>
             <a href="https://wa.me/5561984611083" className="hover:text-[#D4AF37] transition-colors">WhatsApp</a>
             <a href="https://wa.me/5561984611083" className="hover:text-[#D4AF37] transition-colors">Suporte</a>
           </div>
 
-          <div className="text-gray-700 text-[9px] uppercase tracking-tighter text-center md:text-right">
+          <div className="text-gray-400 text-[9px] uppercase tracking-tighter text-center md:text-right">
             <p>&copy; 2026 Store 316. All rights reserved.</p>
             <p className="mt-1 opacity-50 hover:opacity-100 transition-opacity">Design by @agencia.growsolutions</p>
           </div>

@@ -16,6 +16,8 @@ export default function Hero() {
                     fill
                     className="object-cover grayscale"
                     priority
+                    sizes="100vw"
+                    quality={60}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
             </div>
@@ -32,6 +34,8 @@ export default function Hero() {
                     fill
                     className="object-cover object-center scale-105 hover:scale-100 transition-transform duration-[2000ms] ease-out"
                     priority
+                    sizes="(max-width: 768px) 90vw, 55vw"
+                    quality={85}
                 />
             </div>
 

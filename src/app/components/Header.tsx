@@ -20,6 +20,7 @@ export default function Header() {
                         // 2. Usamos a função global para abrir o carrinho
                         onClick={() => setIsCartOpen(true)}
                         className="relative p-2 text-white hover:text-[#D4AF37] transition"
+                        aria-label="Abrir carrinho"
                     >
                         <ShoppingBag size={24} />
                         {cartCount > 0 && (

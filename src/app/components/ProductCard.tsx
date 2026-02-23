@@ -70,10 +70,10 @@ export default function ProductCard({ product }: { product: Product }) {
                 {/* Setas de Navegação */}
                 {hasMultipleImages && (
                     <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                        <button onClick={prevImage} className="p-1 bg-black/50 text-white hover:bg-[#D4AF37] hover:text-black transition-colors rounded-full pointer-events-auto">
+                        <button onClick={prevImage} className="p-1 bg-black/50 text-white hover:bg-[#D4AF37] hover:text-black transition-colors rounded-full pointer-events-auto" aria-label="Imagem anterior">
                             <ChevronLeft size={20} />
                         </button>
-                        <button onClick={nextImage} className="p-1 bg-black/50 text-white hover:bg-[#D4AF37] hover:text-black transition-colors rounded-full pointer-events-auto">
+                        <button onClick={nextImage} className="p-1 bg-black/50 text-white hover:bg-[#D4AF37] hover:text-black transition-colors rounded-full pointer-events-auto" aria-label="Próxima imagem">
                             <ChevronRight size={20} />
                         </button>
                     </div>
@@ -89,7 +89,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <div className="mb-4 flex flex-col items-center">
                     {hasDiscount ? (
                         <div className="flex items-center gap-2">
-                            <span className="text-gray-500 line-through text-xs">
+                            <span className="text-gray-400 line-through text-xs">
                                 R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                             </span>
                             <span className="text-[#D4AF37] text-sm font-light tracking-[0.1em]">
@@ -115,7 +115,7 @@ export default function ProductCard({ product }: { product: Product }) {
                                 onClick={() => setSelectedSize(size)}
                                 className={`w-9 h-9 text-[10px] font-mono border transition-all duration-300 flex items-center justify-center ${selectedSize === size
                                     ? "bg-[#D4AF37] border-[#D4AF37] text-black font-bold"
-                                    : "bg-transparent border-white/10 text-gray-500 hover:border-white/40"
+                                    : "bg-transparent border-white/10 text-gray-400 hover:border-white/40"
                                     }`}
                             >
                                 {size}
@@ -129,7 +129,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     onClick={handleAddToCart}
                     className={`w-full max-w-[220px] py-4 text-[10px] uppercase tracking-[0.25em] font-medium transition-all duration-500 flex items-center justify-center gap-2 ${selectedSize
                         ? "bg-[#D4AF37] text-black border-[#D4AF37]"
-                        : "bg-transparent border border-white/10 text-gray-600 hover:border-[#D4AF37]/50"
+                        : "bg-transparent border border-white/10 text-gray-400 hover:border-[#D4AF37]/50"
                         }`}
                 >
                     <ShoppingBag size={14} />

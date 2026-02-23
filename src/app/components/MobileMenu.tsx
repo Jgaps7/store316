@@ -38,6 +38,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <button
                     onClick={onClose}
                     className="self-end p-2 -mr-2 text-white/70 hover:text-white transition-colors"
+                    aria-label="Fechar menu"
                 >
                     <X size={28} strokeWidth={1.5} />
                 </button>
