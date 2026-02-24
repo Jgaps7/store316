@@ -28,7 +28,7 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-black/20 z-10 mix-blend-overlay pointer-events-none" />
 
                 <Image
-                    src={getDirectDriveLink("https://drive.google.com/file/d/1YVRtj64uAUjK9j0vRf-dWvhmc31H7Z76/view?usp=drive_link")}
+                    src="/Conjunto_Gucci2.jpg"
                     alt="Nova Coleção Store 316"
                     fill
                     className="object-cover object-center scale-105 hover:scale-100 transition-transform duration-[2000ms] ease-out"
