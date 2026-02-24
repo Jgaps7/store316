@@ -82,6 +82,7 @@ export default async function Home() {
                 fill
                 className="object-contain"
                 sizes="(max-width: 768px) 144px, 144px"
+                quality={76}
               />
             </div>
             <p className="text-gray-400 text-[9px] uppercase tracking-[0.2em]">Onde o luxo encontra a autenticidade.</p>

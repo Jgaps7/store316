@@ -67,7 +67,7 @@ export default function CartSidebar() {
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                                         sizes="80px"
-                                        quality={75}
+                                        quality={76}
                                     />
                                 </div>
 
