@@ -1,5 +1,10 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
+// ... [existing imports]
+// Note: Keep original imports but change action
 import Image from "next/image";
-import { getPublicProducts } from "@/app/actions/public";
+import { getPublicProductsGrouped } from "@/app/actions/public";
 import ProductCard from "@/app/components/ProductCard";
 import Hero from "@/app/components/Hero";
 import { Product } from "@/types/store";
@@ -26,7 +31,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const products = await getPublicProducts();
+  const groupedProducts = await getPublicProductsGrouped();
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-[#D4AF37] selection:text-black">
@@ -44,30 +49,48 @@ export default async function Home() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-6 py-32">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-8">
-          <div className="space-y-2">
-            <h2 className="text-4xl font-serif tracking-tight">Coleção <span className="text-[#D4AF37]">01</span></h2>
-            <p className="text-gray-400 text-[10px] uppercase tracking-[0.3em]">Peças Selecionadas • Fevereiro 2026</p>
+      <main className="max-w-7xl mx-auto px-6 py-32 space-y-32">
+        {groupedProducts.length === 0 && (
+          <div className="text-center py-40 border border-dashed border-white/10 rounded-lg">
+            <p className="font-serif italic text-gray-400">Aguardando o próximo drop exclusivo...</p>
           </div>
-          <div className="hidden md:block text-right">
-            <p className="text-gray-400 text-[9px] uppercase tracking-widest max-w-[200px]">
-              Cada item é numerado e verificado sob os mais rígidos controles de qualidade.
-            </p>
-          </div>
-        </div>
+        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
-          {products.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-
-          {products.length === 0 && (
-            <div className="col-span-full text-center py-40 border border-dashed border-white/10 rounded-lg">
-              <p className="font-serif italic text-gray-400">Aguardando o próximo drop exclusivo...</p>
+        {groupedProducts.map((group) => (
+          <section key={group.category.id} className="relative">
+            {/* Header da Categoria */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-6">
+              <div className="space-y-2">
+                <span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.4em]">Seletiva</span>
+                <h2 className="text-4xl font-serif tracking-tight capitalize">{group.category.name}</h2>
+              </div>
+              <Link
+                href={`/categoria/${group.category.slug}`}
+                className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400 hover:text-[#D4AF37] transition-colors group"
+              >
+                Ver coleção completa
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
-          )}
-        </div>
+
+            {/* Grid Limitado a 3 items */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+              {group.products.map((product: Product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Botão Mobile Ver Mais */}
+            <div className="mt-12 flex justify-center md:hidden">
+              <Link
+                href={`/categoria/${group.category.slug}`}
+                className="w-full text-center border border-white/10 py-4 text-[10px] uppercase tracking-[0.2em] text-gray-300 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors"
+              >
+                Explorar mais {group.category.name}
+              </Link>
+            </div>
+          </section>
+        ))}
       </main>
 
       {/* 4. FOOTER: Atualizado com a Logo */}
