@@ -15,7 +15,6 @@ export default function Hero() {
                     alt="Atmosphere"
                     fill
                     className="object-cover grayscale"
-                    priority
                     sizes="100vw"
                     quality={60}
                 />

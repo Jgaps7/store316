@@ -110,7 +110,7 @@ export default function Navbar() {
                         <div className="relative w-24 h-8">
                             <Image src="/logo.png" alt="Logo" fill className="object-contain" />
                         </div>
-                        <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white">
+                        <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white" aria-label="Fechar menu">
                             <X size={28} strokeWidth={1} />
                         </button>
                     </div>
