@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/webp'],
+    qualities: [60, 75, 85, 90, 100],
     minimumCacheTTL: 86400,
   },
   // Nota: O Turbopack já está ativo no Next 16, então não precisamos de configurações extras de build.
