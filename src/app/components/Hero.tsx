@@ -43,7 +43,7 @@ export default function Hero() {
                 <div className="md:w-1/2 pointer-events-auto">
                     {/* Subtítulo Técnico */}
                     <p className="text-[#D4AF37] text-[10px] uppercase tracking-[0.4em] mb-6 animate-in slide-in-from-bottom fade-in duration-700 delay-300">
-                        Edição Limitada • Outono/Inverno '24
+                        Edição Limitada • Verão '26
                     </p>
 
                     {/* Título Gigante Serifado */}
