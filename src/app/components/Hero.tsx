@@ -31,7 +31,7 @@ export default function Hero() {
                     src="/Conjunto_Gucci2.jpg"
                     alt="Nova Coleção Store 316"
                     fill
-                    className="object-cover object-center scale-105 hover:scale-100 transition-transform duration-[2000ms] ease-out"
+                    className="object-contain object-center scale-105 hover:scale-100 transition-transform duration-[2000ms] ease-out"
                     priority
                     sizes="(max-width: 768px) 90vw, 55vw"
                     quality={86}
