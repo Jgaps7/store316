@@ -45,7 +45,7 @@ export default function Navbar() {
 
                     {/* Logo Centralizada (Mobile) / Esquerda (Desktop) */}
                     <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
-                        <Link href="/" className="block">
+                        <Link href="/" className="block" aria-label="Ir para a página inicial">
                             <div className="relative w-28 h-8 md:w-36 md:h-10">
                                 <Image
                                     src="/logo.png"
@@ -53,6 +53,7 @@ export default function Navbar() {
                                     fill
                                     className="object-contain"
                                     priority
+                                    sizes="(max-width: 768px) 112px, 144px"
                                 />
                             </div>
                         </Link>
@@ -77,6 +78,7 @@ export default function Navbar() {
                         <button
                             className="relative p-2 group"
                             onClick={() => setIsCartOpen(true)}
+                            aria-label="Abrir carrinho"
                         >
                             <ShoppingBag size={22} strokeWidth={1.2} className="text-white group-hover:text-[#D4AF37] transition-colors" />
                             {cartCount > 0 && (

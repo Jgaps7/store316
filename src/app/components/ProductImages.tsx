@@ -52,6 +52,7 @@ export default function ProductImages({ images, name }: ProductImagesProps) {
                                     fill
                                     className="object-cover"
                                     priority={index === 0}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                             </div>
                         ))}
@@ -64,12 +65,14 @@ export default function ProductImages({ images, name }: ProductImagesProps) {
                         <button
                             onClick={scrollPrev}
                             className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-white hover:text-black p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                            aria-label="Imagem Anterior"
                         >
                             <ChevronLeft size={24} />
                         </button>
                         <button
                             onClick={scrollNext}
                             className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-white hover:text-black p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                            aria-label="Próxima Imagem"
                         >
                             <ChevronRight size={24} />
                         </button>
@@ -86,12 +89,14 @@ export default function ProductImages({ images, name }: ProductImagesProps) {
                             onClick={() => emblaApi && emblaApi.scrollTo(index)}
                             className={`relative w-20 aspect-[3/4] flex-shrink-0 border transition-all ${selectedIndex === index ? "border-[#D4AF37] opacity-100" : "border-transparent opacity-50 hover:opacity-100"
                                 }`}
+                            aria-label={`Ver miniatura ${index + 1}`}
                         >
                             <Image
                                 src={getDirectDriveLink(img)}
                                 alt={`Thumbnail ${index + 1}`}
                                 fill
                                 className="object-cover"
+                                sizes="80px"
                             />
                         </button>
                     ))}

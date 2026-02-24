@@ -66,6 +66,8 @@ export default function CartSidebar() {
                                         alt={item.product.name}
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                        sizes="80px"
+                                        quality={75}
                                     />
                                 </div>
 
@@ -76,7 +78,7 @@ export default function CartSidebar() {
 
                                         {/* EXIBIÇÃO DO TAMANHO NA SACOLA */}
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-[10px] text-gray-500 uppercase tracking-tighter">Tamanho:</span>
+                                            <span className="text-[10px] text-gray-400 uppercase tracking-tighter">Tamanho:</span>
                                             <span className="text-[10px] font-bold text-[#D4AF37] border border-[#D4AF37]/30 px-1.5 rounded">
                                                 {item.selectedSize}
                                             </span>
@@ -91,7 +93,7 @@ export default function CartSidebar() {
                                             return (
                                                 <div className="mt-2 flex flex-col items-start gap-0.5">
                                                     {hasDiscount && (
-                                                        <span className="text-[10px] text-gray-500 line-through font-mono">
+                                                        <span className="text-[10px] text-gray-400 line-through font-mono">
                                                             R$ {item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                                         </span>
                                                     )}
@@ -134,7 +136,7 @@ export default function CartSidebar() {
 
                                         <button
                                             onClick={() => removeFromCart(item.product.id, item.selectedSize)}
-                                            className="text-gray-500 hover:text-red-500 transition-colors"
+                                            className="text-gray-400 hover:text-red-500 transition-colors"
                                             title="Remover item"
                                             aria-label="Remover item do carrinho"
                                         >
