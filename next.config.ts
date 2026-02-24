@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
         hostname: 'lh3.googleusercontent.com',
       },
     ],
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp'],
     minimumCacheTTL: 86400,
   },
   // Nota: O Turbopack já está ativo no Next 16, então não precisamos de configurações extras de build.
